@@ -3,7 +3,7 @@ package com.project2;
 import java.util.*;
 
 public class studentdb {
-    public static void main(String[] args)throws InterruptedException {
+    public static void main(String[] args) {
         //create students
         System.out.println("Enter the number of students you want to enroll: ");
         Scanner sc= new Scanner(System.in);
@@ -30,18 +30,26 @@ public class studentdb {
         int option=sc.nextInt();
         if(option==1){
             Collections.sort(students);
-            System.out.print("Sorting database based on ID ");
-            for(int i=0;i<10;i++){
-                Thread.sleep(500);
-                System.out.print("* ");
+            System.out.print("Sorting database based on ID :");
+            try {
+                for (int i = 0; i < 10; i++) {
+                    Thread.sleep(500);
+                    System.out.print("* ");
+                }
+            }catch (Exception e){
+                e.printStackTrace();
             }
             System.out.println();
         }
         else{
             System.out.print("Sorting database based on NAME ");
-            for(int i=0;i<10;i++){
-                Thread.sleep(500);
-                System.out.print("* ");    // Fake animation
+            try {
+                for (int i = 0; i < 10; i++) {
+                    Thread.sleep(500);
+                    System.out.print("* ");    // Fake animation
+                }
+            }catch (Exception e){
+                e.printStackTrace();
             }
             System.out.println();
             students.sort(com);
@@ -54,3 +62,4 @@ public class studentdb {
         }
     }
 }
+
