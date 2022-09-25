@@ -76,11 +76,12 @@ public class studentdb {
             }
         }
         System.out.println("Press 1 to perform Join Operation");
-        System.out.print("Select the condition field: ");
-        int a= sk.nextInt();
         if(sk.nextInt()==1) {
+            System.out.print("Select the condition field: ");
+            int a = sk.nextInt();
             DBM dbm = new DBM();
-            System.out.println(dbm.join(st.get(0), st.get(1),a));
+            System.out.println(dbm.join(st.get(0), st.get(1), a));
         }
     }
 }
+
