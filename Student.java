@@ -1,100 +1,86 @@
 package com.project2;
 
-
 import java.util.*;
-
-
-interface studentdata{
-    public void enroll();
-    public LinkedList<String> showInfo();
-}
-interface transaction{
-    public void viewBalance();
-    public void payTuition();
-}
-
-
-public class Student implements studentdata,transaction,Comparable<Student>{
-    private final String firstName;
-    public final char firstChar;
-    private final String lastName;
-    private int gradeYear;
-    private String studentID;
-    private int compareId;
-    ArrayList<String> courses = new ArrayList<>();
-    private int tuitionBalance = 0;
-    private static int id=1000;
-
-    public Student(){
-        Scanner sc= new Scanner(System.in);
-        System.out.println("\nEnter student first name : ");
-        this.firstName=sc.nextLine();
-        firstChar=firstName.charAt(0);
-
-        System.out.println("Enter student Last name : ");
-        this.lastName=sc.nextLine();
-
-        System.out.println("1 - First year\n2 - Second year\n3- Third Year\n4- Fourth year");
-        this.gradeYear= sc.nextInt();
-        setStudentID();//calling the method to call unique id
-    }
-    private void setStudentID(){
-        id++;
-        this.studentID= gradeYear + "" + id;
-        this.compareId=(gradeYear*1000)+id;
-    }
-    public void enroll(){
-        do {
-            System.out.println("enter course to enroll (Quit to terminate): ");
+public class studentdb {
+    public static void main(String[] args) {
+        ArrayList<ArrayList<LinkedList<String>>> st = new ArrayList<ArrayList<LinkedList<String>>>();
+   //*******************************************************************************************************************
+        for (int k = 0; k < 2; k++) {
+            st.add(new ArrayList<LinkedList<String>>());
+            //create students
+            System.out.println("Enter the number of students you want to enroll: ");
             Scanner sc = new Scanner(System.in);
-            String course = sc.nextLine();
-            if (!Objects.equals(course, "Quit")) {
-                courses.add(course);
-                System.out.print("Enter Cost of Course:     ");
-                int costOfCourse = sc.nextInt();
-                tuitionBalance += costOfCourse;
+            int numOfStudents = sc.nextInt();
+            ArrayList<Student> students = new ArrayList<>();
+
+
+            for (int i = 0; i < numOfStudents; i++) {
+                Student tempstudent = new Student();
+                tempstudent.enroll();
+                tempstudent.payTuition();
+                students.add(tempstudent);
             }
-            else{break;}
-        }while (true);
-    }
-    //transaction-->
-    public void viewBalance(){
-        System.out.println("Remaining amount : Rs. "+ tuitionBalance);
-    }//called inside payTuition
-    public void payTuition(){
-        viewBalance();
-        Scanner sc= new Scanner(System.in);
-        System.out.println("Enter payment amount: Rs.");
-        int payment= sc.nextInt();
-        tuitionBalance= tuitionBalance-payment;
-        System.out.println("Transaction Successful of amount : Rs."+payment);
-        viewBalance();
-    }
+            //Sort the database:
 
-    //status info:
-    public LinkedList<String> showInfo(){
-        LinkedList<String> details= new LinkedList<>();
-        details.add(firstName+" "+lastName);
-        details.add(courses.toString());
-        details.add(String.valueOf(gradeYear));
-        details.add(String.valueOf(studentID));
-        details.add(String.valueOf(tuitionBalance));
-
-//        return firstName +" "+lastName+"    |    "+ courses+
-//                "    |   "+gradeYear+"   |    "+studentID+
-//                "    |   "+tuitionBalance;
-        return details;
-    }
-    public int compareTo(Student st){
-        //here the comparison is made with st and this
-        //this>st = +
-        //this<st = -
-        //this==st=0
-        if(this.compareId>st.compareId){
-            return 1;
+            Comparator<Student> com = new Comparator<Student>() {
+                @Override
+                public int compare(Student o1, Student o2) {
+                    return Character.compare(o1.firstChar, o2.firstChar);
+                }
+            };
+            System.out.println("Select on which basis do you want to sort the database: ");
+            System.out.println("Press 1 for student ID, Press 2 for First Name");
+            int option = sc.nextInt();
+            if (option == 1) {
+                Collections.sort(students);
+                System.out.print("Sorting database based on ID :");
+                try {
+                    for (int i = 0; i < 10; i++) {
+                        Thread.sleep(100);
+                        System.out.print("* ");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                System.out.println();
+            } else {
+                System.out.print("Sorting database based on NAME ");
+                try {
+                    for (int i = 0; i < 10; i++) {
+                        Thread.sleep(100);
+                        System.out.print("* ");    // Fake animation
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                System.out.println();
+                students.sort(com);
+            }
+            //ee.add(students);
+            System.out.println("TOTAL STUDENT STRENGTH : " + students.size());
+            System.out.println("\n" + "DATABASE:");
+            System.out.println("Name                |   Course(s)                |  Batch      |    Student ID      |   Balance Due");
+            for (Student i : students) {
+                st.get(k).add(i.showInfo());
+                System.out.println("---------------------------------------------------------------------------------------" + "\n" + i.showInfo());
+            }
         }
-        else{
-            return -1;
+    //******************************************************************************************************************
+//        System.out.println(st);
+
+        System.out.println("Press 1 to show the entire databse: ");
+        Scanner sk= new Scanner(System.in);
+        if(sk.nextInt()==1) {
+            for (ArrayList<LinkedList<String>> s : st) {
+                System.out.println(s);
+            }
+        }
+        System.out.println("Press 1 to perform Join Operation");
+        System.out.print("Select the condition field: ");
+        int a= sk.nextInt();
+        if(sk.nextInt()==1) {
+            DBM dbm = new DBM();
+            System.out.println(dbm.join(st.get(0), st.get(1),a));
         }
     }
 }
